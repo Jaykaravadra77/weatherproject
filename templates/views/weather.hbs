@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+
+  <title>Hello, world!</title>
+
+  {{>bc}}
+</head>
+
+<body style="background-color: black;">
+
+
+  {{>header}}
+  <div class="container">
+    <div class="row col-md-12 my-3  justify-content-center">
+      <div class="row col-md-7 justify-content-center"
+        style="background-color: rgb(0, 0, 0); min-height: 50px;border-radius: 2%;">
+
+        <table>
+          <form action="">
+            <tr>
+              <td><input type="text" id="txt" align="center" placeholder="Enter City" class="form-control"
+                  style="width: 400px;height: 50px;"></td>
+              <td> <button type="submit" id="btnsub" style="width: 100px;height: 50px;"
+                  class="btn btn-success mx-4  ">Search</button></td>
+            </tr>
+          </form>
+        </table>
+      </div>
+
+    </div>
+
+    <div class=" d-flex align-items-center justify-content-center" style="height: 500px">
+
+      <div class="card col-md-6 " style="height:400px;background: rgb(56, 54, 54);">
+        <div class="card-body">
+          <h5 class="card-title ">
+
+          </h5>
+
+          <div class=" row justify-content-center">
+
+            <div class="icon col-md-12 text-center">
+              <h1 id="icon" class="animation" style="color:rgb(221, 140, 33)"></h1>
+            </div>
+            <div class="output col-md-12 text-center">
+              <h3 id="output" class="text-white">Get output Here</h3>
+            </div>
+
+            <div class="date col-md-12 text-center">
+              <h5 style="color: rgb(127, 160, 211);" id="date"></h5>
+            </div>
+            <div class="time col-md-12 text-center">
+              <h5 id="time" style="color: rgb(127, 160, 211);"></h5>
+            </div>
+            <div class="location col-md-12 text-center">
+              <h1 id="city" class="text-white"></h1>
+            </div>
+            <div class="weather">
+              <h1 class="text-white" id="weather">
+
+              </h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  </div>
+
+
+  </div>
+  </div>
+  </div>
+
+
+
+  <script>
+    const currentDate = new Date();
+    const currentDayOfMonth = currentDate.getDate();
+    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+    const currentYear = currentDate.getFullYear();
+    var weekday = new Array(7);
+    weekday[0] = "Sun";
+    weekday[1] = "Mon";
+    weekday[2] = "Tue";
+    weekday[3] = "Wed";
+    weekday[4] = "Thu";
+    weekday[5] = "Fri";
+    weekday[6] = "Sat";
+
+
+    var n = weekday[currentDate.getDay()];
+
+    const dateString = (currentMonth + 1) + "-" + currentDayOfMonth + "-" + currentYear;
+    date.innerText = dateString + "|" + n;
+
+    currentDate.toLocaleString();       // -> "2/1/2013 7:37:08 AM"
+    // d.toLocaleDateString();   // -> "2/1/2013"
+    // d.toLocaleTimeString();
+    var nightTimeStart = 19;
+    var nightTimeEnd = 6;
+    var currentHour = currentDate.getHours();
+
+
+    let time = document.getElementById('time');
+    time.innerText = currentDate.toLocaleTimeString();
+
+
+
+
+
+
+
+
+
+    let city = document.getElementById('city');
+    let txt = document.getElementById('txt');
+    let weatherstatus = document.getElementById('weather');
+    let icon = document.getElementById('icon');
+    let output = document.getElementById('output');
+
+    async function f(e) {
+      e.preventDefault();
+      if (txt.value != "") {
+
+        let f = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${txt.value}&appid=d061eaee7cb67a853b0b0f83820422ac`);
+        let res = await f.json();
+        if (f.ok) {
+          city.innerText = res.name;
+          weatherstatus.innerHTML = `<i style="color: rgb(23, 217, 231);" class="fas fa-cloud fa"></i> ${res.weather[0].main}|${(res.main.temp - 273).toFixed(2)}°C`;
+          output.innerText = "";
+          if (currentHour > nightTimeStart || currentHour < nightTimeEnd) {
+
+            icon.innerHTML = `<i class="fas fa-moon fa-2x"></i>`;
+          } else {
+            icon.innerHTML = `<i class="fas fa-sun fa-2x"></i>`;
+          }
+        }
+        else {
+          city.innerHTML = "<p>Please Enter city correctly</p>";
+          weatherstatus.innerText = "";
+          icon.innerText = "";
+
+        }
+
+      } else {
+        city.innerText = "Enter City Name";
+        weatherstatus.innerText = "";
+        icon.innerText = "";
+        output.innerText="Get output Here";
+      }
+    }
+
+    // let date = document.getElementById('date');
+    let btnsub = document.getElementById('btnsub');
+
+
+    btnsub.addEventListener('click', f);
+
+
+
+
+
+
+
+  </script>
+
+
+  {{>bs}}
+</body>
+
+</html>
